@@ -1,4 +1,27 @@
-
+#' Search Data Frames for Personally Identifiable Information
+#'
+#' @param df a data frame object
+#'
+#' @return Returns a list of columns that potentially contain PII
+#' @import dplyr
+#' @import stringr
+#' @importFrom stats median
+#' @export
+#'
+#' @examples
+#' # create a data frame containing various personally identifiable information
+#' pii_df <- data.frame(
+#'  lat = c(40.7128, 34.0522, 41.8781),
+#'  long = c(-74.0060, -118.2437, -87.6298),
+#'  first_name = c("John", "Michael", "Linda"),
+#'  phone = c("123-456-7890", "234-567-8901", "345-678-9012"),
+#'  age = sample(30:60, 3, replace = TRUE),
+#'  email = c("test@example.com", "contact@domain.com", "user@website.org"),
+#'  disabled = c("No", "Yes", "No"),
+#'  stringsAsFactors = FALSE
+#' )
+#'
+#' check_PII(pii_df)
 
 check_PII <- function(df) {
 

@@ -1,11 +1,17 @@
 Package: pii
-Type: Package
-Title: What the Package Does (Title Case)
+Title: Search Data Frames for Personally Identifiable Information
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: 
+    person("Jacob", "Patterson-Stein", email = "jacobpstein@gmail.com",
+  role = c("aut", "cre"))
+Maintainer: Jacob Patterson-Stein <jacobpstein@gmail.com>
+Description: Check a data frame for personal information, including names, location, disability status, and geo-coordinates. 
+License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
+Depends: R (>= 2.10),
+    dplyr, 
+    stringr
+RoxygenNote: 7.3.2
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
