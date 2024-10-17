@@ -4,3 +4,8 @@
 .httr-oauth
 .DS_Store
 .quarto
+.CRAN-SUBMISSION
+.cran-comments.md
+.NAMESPACE
+.README.md
+.README.rmd
