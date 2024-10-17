@@ -3,7 +3,8 @@
 #' @param df a data frame object
 #' @param exclude columns to exclude from the data frame splitdescription
 #'
-#' @return Returns two data frames into the global environment: one containing the PII columns and one without the PII columns. A unique merge key is created to join them.
+#' @return Returns two data frames into the global environment: one containing the PII columns and one without the PII columns.
+#'     A unique merge key is created to join them. The function then prints the columns that were flagged and split to the console.
 #' @import dplyr
 #' @import stringr
 #' @import uuid
