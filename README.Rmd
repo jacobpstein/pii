@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# pii
+# pii: A package for dealing with personally identifiable information
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -84,3 +84,38 @@ print(mtcars_pii)
 ```
 
 The `check_PII` function flags combinations of columns that together could identify individuals. It also flags columns that contain names that suggest a column contains PII, like, `phone_number.` 
+
+## Seperate your PII
+
+Once you have run the `check_PII` function, you might want to remove those columns from your data frame so that the data can easily be shared. The `split_PII_data` function removes the columns flagged by `check_PII,` puts them into a separate data frame, and creates a unique join key should you need to merge them back in at some point.
+
+```{r example2}
+
+# use our data from earlier
+car_df_split <- split_PII_data(mtcars_with_pii, exclude = "car_name")
+
+# this creates a list containing two data frames: one with PII, one without
+
+car_df_to_share <- car_df_split$non_pii_data
+
+car_PII <- car_df_split$pii_data
+
+```
+
+Note that the `exclude =` argument allows the user to keep certain columns that were flagged as PII in the data. 
+```{r example3}
+
+# take a look at our non-PII data
+head(car_df_to_share)
+
+```
+
+Seems ok. Meanwhile, you can put the PII in a secure, encrypted location. But let's take a peak...
+```{r example4}
+
+# take a look at our PII data
+head(car_PII)
+
+```
+
+

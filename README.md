@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# pii
+# pii: A package for dealing with personally identifiable information
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -68,6 +68,7 @@ library(dplyr)
 library(tibble)
 library(pii)
 #> Loading required package: stringr
+#> Loading required package: uuid
 
 # Set a seed for reproducibility
 set.seed(101624)
@@ -115,3 +116,62 @@ print(mtcars_pii)
 The `check_PII` function flags combinations of columns that together
 could identify individuals. It also flags columns that contain names
 that suggest a column contains PII, like, `phone_number.`
+
+## Seperate your PII
+
+Once you have run the `check_PII` function, you might want to remove
+those columns from your data frame so that the data can easily be
+shared. The `split_PII_data` function removes the columns flagged by
+`check_PII,` puts them into a separate data frame, and creates a unique
+join key should you need to merge them back in at some point.
+
+``` r
+
+# use our data from earlier
+car_df_split <- split_PII_data(mtcars_with_pii, exclude = "car_name")
+
+# this creates a list containing two data frames: one with PII, one without
+
+car_df_to_share <- car_df_split$non_pii_data
+
+car_PII <- car_df_split$pii_data
+```
+
+Note that the `exclude =` argument allows the user to keep certain
+columns that were flagged as PII in the data.
+
+``` r
+
+# take a look at our non-PII data
+head(car_df_to_share)
+#>            car_name disp  hp                             join_key
+#> 1         Mazda RX4  160 110 a9420f45-12d0-4bc4-bb7b-4eacbba26fc2
+#> 2     Mazda RX4 Wag  160 110 317cbb8f-58bb-4b19-9583-56b00b90990c
+#> 3        Datsun 710  108  93 b3379990-9280-40df-b70b-8e06f6eab635
+#> 4    Hornet 4 Drive  258 110 d7f7daa2-fd6c-48db-9df7-17b83cf8126c
+#> 5 Hornet Sportabout  360 175 3cf2f525-b962-44a4-9642-4fa54186a385
+#> 6           Valiant  225 105 0676124d-dbd0-4d95-b084-f2944884cb84
+```
+
+Seems ok. Meanwhile, you can put the PII in a secure, encrypted
+location. But let’s take a peak…
+
+``` r
+
+# take a look at our PII data
+head(car_PII)
+#>   phone_number  mpg  longitude cyl drat    wt  qsec vs am gear carb  latitude
+#> 1 555-292-5528 21.0 -165.64468   6 3.90 2.620 16.46  0  1    4    4 -71.17268
+#> 2 555-699-1808 21.0  -63.92327   6 3.90 2.875 17.02  0  1    4    4  23.78131
+#> 3 555-732-3162 22.8 -103.97027   4 3.85 2.320 18.61  1  1    4    1  35.18776
+#> 4 555-513-8575 21.4 -119.58928   6 3.08 3.215 19.44  1  0    3    1 -77.85741
+#> 5 555-597-6296 18.7  177.27554   8 3.15 3.440 17.02  0  0    3    2 -75.31981
+#> 6 555-973-6320 18.1 -178.92443   6 2.76 3.460 20.22  1  0    3    1  36.31883
+#>                               join_key
+#> 1 a9420f45-12d0-4bc4-bb7b-4eacbba26fc2
+#> 2 317cbb8f-58bb-4b19-9583-56b00b90990c
+#> 3 b3379990-9280-40df-b70b-8e06f6eab635
+#> 4 d7f7daa2-fd6c-48db-9df7-17b83cf8126c
+#> 5 3cf2f525-b962-44a4-9642-4fa54186a385
+#> 6 0676124d-dbd0-4d95-b084-f2944884cb84
+```
