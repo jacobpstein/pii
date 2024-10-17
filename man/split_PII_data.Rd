@@ -9,7 +9,7 @@ split_PII_data(df, exclude_columns = NULL)
 \arguments{
 \item{df}{a data frame object}
 
-\item{exclude}{columns to exclude from the data frame splitdescription}
+\item{exclude_columns}{columns to exclude from the data frame splitdescription}
 }
 \value{
 Returns two data frames into the global environment: one containing the PII columns and one without the PII columns.

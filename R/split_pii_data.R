@@ -1,13 +1,14 @@
 #' Split Data Into PII and Non-PII Columns
 #'
 #' @param df a data frame object
-#' @param exclude columns to exclude from the data frame splitdescription
+#' @param exclude_columns columns to exclude from the data frame splitdescription
 #'
 #' @return Returns two data frames into the global environment: one containing the PII columns and one without the PII columns.
 #'     A unique merge key is created to join them. The function then prints the columns that were flagged and split to the console.
 #' @import dplyr
 #' @import stringr
 #' @import uuid
+#' @import utils
 
 #' @examples
 #' # create a data frame containing various personally identifiable information
@@ -25,9 +26,11 @@
 #' split_PII_data(pii_df, exclude_columns = c("phone"))
 #'
 
-
 #' @export
 split_PII_data <- function(df, exclude_columns = NULL) {
+
+  join_key <- NULL
+
   # Run the PII check quietly
   flagged <- check_PII(df)
 
@@ -53,10 +56,7 @@ split_PII_data <- function(df, exclude_columns = NULL) {
   pii_data <- df %>% select(all_of(pii_columns), join_key)
   non_pii_data <- df %>% select(-all_of(pii_columns))
 
-  # Assign the data frames to the global environment
-  assign("pii_data", pii_data, envir = .GlobalEnv)
-  assign("non_pii_data", non_pii_data, envir = .GlobalEnv)
 
-  # return the column names that were flagged (for user reference)
-  return(pii_columns)
+  # return data frames
+  return(list(pii_data = pii_data, non_pii_data = non_pii_data))
 }
