@@ -14,6 +14,27 @@ guidlines](https://www.usaid.gov/sites/default/files/2022-05/508saa.pdf)
 from the United States Agency for International Development, though
 people can debate what is and isn’t PII.
 
+The main function of the `pii` package, `check_PII` looks for the
+following:
+
+- Names
+- Email addresses
+- Phone numbers
+- Locations (e.g., city or village name)
+- Geo-coordinates
+- Disability status
+- Combinations of the above that might identify someone
+
+The function dynamically determines potential PII issues across by
+comparing a column’s uniqueness to the median uniqueness of the dataset,
+adjusting it accordingly (e.g., by 20%). Numeric and date columns are
+skipped. Mixed classes within a column (e.g., text and numbers) are
+flagged as this type of information is more likely to contain PII.
+
+This function provides a first step in flagging *potential* PII within
+your data. Nothing beats gaining familiarity with the data, strong
+documentation, and careful data management.
+
 ## Installation
 
 You can install the development version of pii from
