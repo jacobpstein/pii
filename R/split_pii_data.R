@@ -25,14 +25,6 @@
 #' split_PII_data(pii_df, exclude_columns = c("phone"))
 #'
 
-#' @export
-
-extract_unique_columns <- function(flagged_columns) {
-  # Split on "&" to get individual column names, then flatten and trim whitespace
-  unique_columns <- unlist(str_split(flagged_columns, " & "))
-  unique_columns <- unique(str_trim(unique_columns))
-  return(unique_columns)
-}
 
 #' @export
 split_PII_data <- function(df, exclude_columns = NULL) {
@@ -42,6 +34,13 @@ split_PII_data <- function(df, exclude_columns = NULL) {
   # If exclude_columns is provided, remove those columns from the flagged list
   if (!is.null(exclude_columns)) {
     flagged <- flagged[!flagged$Column %in% exclude_columns, ]
+  }
+
+  extract_unique_columns <- function(flagged_columns) {
+    # Split on "&" to get individual column names, then flatten and trim whitespace
+    unique_columns <- unlist(str_split(flagged_columns, " & "))
+    unique_columns <- unique(str_trim(unique_columns))
+    return(unique_columns)
   }
 
   # Extract all unique PII column names (handle pairs like "name & phone")
