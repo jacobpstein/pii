@@ -93,4 +93,4 @@ print(mtcars_pii)
 
 The `check_PII` function flags combinations of columns that together
 could identify individuals. It also flags columns that contain names
-that suggest a column contains PII, like, `PhoneNumber.`
+that suggest a column contains PII, like, `phone_number.`
