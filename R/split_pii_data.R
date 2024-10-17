@@ -29,16 +29,10 @@
 #' @export
 split_PII_data <- function(df, exclude_columns = NULL) {
 
+  # create join key object
   join_key <- NULL
 
-  # Run the PII check quietly
-  flagged <- check_PII(df)
-
-  # If exclude_columns is provided, remove those columns from the flagged list
-  if (!is.null(exclude_columns)) {
-    flagged <- flagged[!flagged$Column %in% exclude_columns, ]
-  }
-
+  # create a function within our function to split paired PII columns, like lat & long
   extract_unique_columns <- function(flagged_columns) {
     # Split on "&" to get individual column names, then flatten and trim whitespace
     unique_columns <- unlist(str_split(flagged_columns, " & "))
@@ -46,8 +40,19 @@ split_PII_data <- function(df, exclude_columns = NULL) {
     return(unique_columns)
   }
 
+  # Run the PII check quietly
+  flagged <- check_PII(df)
+
   # Extract all unique PII column names (handle pairs like "name & phone")
   pii_columns <- extract_unique_columns(flagged$Column)
+
+  # If exclude_columns is provided, remove those columns from the flagged list
+  if (!is.null(exclude_columns)) {
+    exclude_columns <- unlist(exclude_columns)  # Ensure it's treated as a vector
+    # Remove any columns from the PII list that are in exclude_columns
+    pii_columns <- setdiff(pii_columns, exclude_columns)
+  }
+
 
   # Create a unique join key for each row in the original data frame
   df$join_key <- UUIDgenerate(n = nrow(df))

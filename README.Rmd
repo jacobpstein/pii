@@ -92,7 +92,7 @@ Once you have run the `check_PII` function, you might want to remove those colum
 ```{r example2}
 
 # use our data from earlier
-car_df_split <- split_PII_data(mtcars_with_pii, exclude = "car_name")
+car_df_split <- split_PII_data(mtcars_with_pii, exclude_columns = c("car_name", "mpg", "cyl", "drat", "wt", "qsec", "vs", "am", "gear", "carb"))
 
 # this creates a list containing two data frames: one with PII, one without
 
@@ -102,7 +102,7 @@ car_PII <- car_df_split$pii_data
 
 ```
 
-Note that the `exclude =` argument allows the user to keep certain columns that were flagged as PII in the data. 
+Note that the `exclude_columns =` argument allows the user to keep certain columns that were flagged as PII in the data. 
 ```{r example3}
 
 # take a look at our non-PII data
