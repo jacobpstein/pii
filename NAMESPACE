@@ -2,6 +2,7 @@
 
 export(check_PII)
 export(extract_unique_columns)
+export(split_PII_data)
 import(dplyr)
 import(stringr)
 import(uuid)

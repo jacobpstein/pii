@@ -12,7 +12,8 @@ extract_unique_columns(flagged_columns)
 \item{exclude}{columns to exclude from the data frame splitdescription}
 }
 \value{
-Returns two data frames into the global environment: one containing the PII columns and one without the PII columns. A unique merge key is created to join them.
+Returns two data frames into the global environment: one containing the PII columns and one without the PII columns.
+    A unique merge key is created to join them. The function then prints the columns that were flagged and split to the console.
 }
 \description{
 Split Data Into PII and Non-PII Columns

@@ -9,8 +9,6 @@
 #' @import stringr
 #' @import uuid
 
-#' @export
-#'
 #' @examples
 #' # create a data frame containing various personally identifiable information
 #' pii_df <- data.frame(
@@ -27,7 +25,8 @@
 #' split_PII_data(pii_df, exclude_columns = c("phone"))
 #'
 
-# Helper function to extract unique column names, even from pairs like "col1 & col2"
+#' @export
+
 extract_unique_columns <- function(flagged_columns) {
   # Split on "&" to get individual column names, then flatten and trim whitespace
   unique_columns <- unlist(str_split(flagged_columns, " & "))
@@ -35,7 +34,7 @@ extract_unique_columns <- function(flagged_columns) {
   return(unique_columns)
 }
 
-# Function to split data into PII and non-PII columns, with a join key
+#' @export
 split_PII_data <- function(df, exclude_columns = NULL) {
   # Run the PII check quietly
   flagged <- check_PII(df)
@@ -59,6 +58,6 @@ split_PII_data <- function(df, exclude_columns = NULL) {
   assign("pii_data", pii_data, envir = .GlobalEnv)
   assign("non_pii_data", non_pii_data, envir = .GlobalEnv)
 
-  # Optionally, return the column names that were flagged (for user reference)
+  # return the column names that were flagged (for user reference)
   return(pii_columns)
 }
