@@ -26,12 +26,12 @@ devtools::install_github("jacobpstein/pii")
 
 ## Example
 
-Let’s say you’re working with the `cars` data set. But this isn’t just
-any version of `cars`, this is more like a data about characters from
+Let’s say you’re working with the `mtcars` data set. But this isn’t just
+any version of `mtcars`, this is more like a data about characters from
 the hit feature film [*Cars*](https://cars.disney.com)! You happen to
-have phone numbers and the location of each cars house. A colleague at a
-partner org asks for the data, but you aren’t sure if it has PII, so you
-run the `check_PII` function.
+have phone numbers and the location of each car’s house. A colleague at
+a partner org asks for the data, but you aren’t sure if it has PII, so
+you run the `check_PII` function.
 
 ``` r
 
@@ -44,6 +44,7 @@ library(dplyr)
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, setdiff, setequal, union
+library(tibble)
 library(pii)
 #> Loading required package: stringr
 
@@ -51,7 +52,7 @@ library(pii)
 set.seed(101624)
 
 # Number of rows in the cars dataset
-n <- nrow(cars)
+n <- nrow(mtcars)
 
 # Generate car phone numbers as strings
 phone_numbers <- sprintf("555-%03d-%04d", sample(100:999, n, replace = TRUE), sample(1000:9999, n, replace = TRUE))
@@ -62,31 +63,32 @@ latitudes <- runif(n, min = -90, max = 90)
 # Generate longitudes for where the cars live (range roughly between -180 and 180)
 longitudes <- runif(n, min = -180, max = 180)
 
-# Merge new columns into the cars dataset using mutate
-cars_with_pii <- cars %>%
-  mutate(PhoneNumber = phone_numbers,
-         Latitude = latitudes,
-         Longitude = longitudes)
+# Merge new columns into the mtcars dataset using mutate
+mtcars_with_pii <- mtcars %>%
+  mutate(phone_number = phone_numbers,
+         latitude = latitudes,
+         longitude = longitudes) |> 
+  # we also have row names with actual car names!
+  rownames_to_column(var = "car_name")
 
 # run our function over the data
-cars_pii <- check_PII(cars_with_pii)
+mtcars_pii <- check_PII(mtcars_with_pii)
 
-# take a look at the list
-print(cars_pii)
-#> $PhoneNumber
-#> [1] "Column name suggests PII"
-#> 
-#> $`speed & dist`
-#> [1] "Potential latitude/longitude pair detected"
-#> 
-#> $`Latitude & dist`
-#> [1] "Potential latitude/longitude pair detected"
-#> 
-#> $`speed & Longitude`
-#> [1] "Potential latitude/longitude pair detected"
-#> 
-#> $`Latitude & Longitude`
-#> [1] "Potential latitude/longitude pair detected"
+# take a look at the output
+print(mtcars_pii)
+#>                  Column                                                Reason
+#> 1              car_name                              Column name suggests PII
+#> 2          phone_number                              Column name suggests PII
+#> 3       mpg & longitude Potential latitude/longitude or similar pair detected
+#> 4       cyl & longitude Potential latitude/longitude or similar pair detected
+#> 5      drat & longitude Potential latitude/longitude or similar pair detected
+#> 6        wt & longitude Potential latitude/longitude or similar pair detected
+#> 7      qsec & longitude Potential latitude/longitude or similar pair detected
+#> 8        vs & longitude Potential latitude/longitude or similar pair detected
+#> 9        am & longitude Potential latitude/longitude or similar pair detected
+#> 10     gear & longitude Potential latitude/longitude or similar pair detected
+#> 11     carb & longitude Potential latitude/longitude or similar pair detected
+#> 12 latitude & longitude Potential latitude/longitude or similar pair detected
 ```
 
 The `check_PII` function flags combinations of columns that together

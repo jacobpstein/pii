@@ -10,7 +10,7 @@ check_PII(df)
 \item{df}{a data frame object}
 }
 \value{
-Returns a list of columns that potentially contain PII
+Returns a data frame of columns that potentially contain PII
 }
 \description{
 Search Data Frames for Personally Identifiable Information
