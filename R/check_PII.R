@@ -2,7 +2,7 @@
 #'
 #' @param df a data frame object
 #'
-#' @return Returns a list of columns that potentially contain PII
+#' @return Returns a data frame of columns that potentially contain PII
 #' @import dplyr
 #' @import stringr
 #' @importFrom stats median
@@ -32,8 +32,8 @@ check_PII <- function(df) {
   phone_regex <- "\\(?\\d{3}\\)?[ -]?\\d{3}[ -]?\\d{4}"
   email_regex <- "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\\b"
 
-  # Initialize a list to store flagged columns
-  flagged_columns <- list()
+  # Initialize a data frame to store flagged columns and reasons
+  flagged_columns <- data.frame(Column = character(), Reason = character(), stringsAsFactors = FALSE)
 
   # Get dataset-specific heuristics
   n_rows <- nrow(df)
@@ -73,19 +73,19 @@ check_PII <- function(df) {
 
     # 2. Check if the column name contains any PII-related keywords
     if (any(str_detect(tolower(colname), pii_keywords))) {
-      flagged_columns[[colname]] <- "Column name suggests PII"
+      flagged_columns <- rbind(flagged_columns, data.frame(Column = colname, Reason = "Column name suggests PII"))
       next
     }
 
     # 3. Check for phone numbers using regex
     if (any(str_detect(column_data, phone_regex))) {
-      flagged_columns[[colname]] <- "Phone number detected"
+      flagged_columns <- rbind(flagged_columns, data.frame(Column = colname, Reason = "Phone number detected"))
       next
     }
 
     # 4. Check for email addresses using regex
     if (any(str_detect(column_data, email_regex))) {
-      flagged_columns[[colname]] <- "Email address detected"
+      flagged_columns <- rbind(flagged_columns, data.frame(Column = colname, Reason = "Email address detected"))
       next
     }
 
@@ -99,25 +99,25 @@ check_PII <- function(df) {
     uniqueness_threshold <- median_uniqueness * 1.2  # Increase median threshold by 20%
 
     if (col_uniqueness > uniqueness_threshold && length_check) {
-      flagged_columns[[colname]] <- paste("Potential name or unique identifier detected (string length", string_length_min, "-", string_length_max, "and uniqueness >", uniqueness_threshold, ")")
+      flagged_columns <- rbind(flagged_columns, data.frame(Column = colname, Reason = paste("Potential name or unique identifier detected (string length", string_length_min, "-", string_length_max, "and uniqueness >", uniqueness_threshold, ")")))
       next
     }
 
     # 7. Mixed data types check (potential identifier)
     if (any(is.numeric(df[[colname]]) & !all(is.na(column_data)))) {
-      flagged_columns[[colname]] <- "Mixed data types detected (potential identifier)"
+      flagged_columns <- rbind(flagged_columns, data.frame(Column = colname, Reason = "Mixed data types detected (potential identifier)"))
       next
     }
 
     # 8. Check for city, town, or village names with high uniqueness
     if (col_uniqueness > 0.5 && any(str_detect(tolower(colname), c("city", "town", "village", "region", "district")))) {
-      flagged_columns[[colname]] <- "Potential city/town/village name detected"
+      flagged_columns <- rbind(flagged_columns, data.frame(Column = colname, Reason = "Potential city/town/village name detected"))
       next
     }
 
     # 9. Check for disability status by looking for relevant keywords in the data
     if (any(str_detect(tolower(column_data), "disability|disabled|handicap"))) {
-      flagged_columns[[colname]] <- "Disability status detected"
+      flagged_columns <- rbind(flagged_columns, data.frame(Column = colname, Reason = "Disability status detected"))
       next
     }
   }
@@ -126,11 +126,10 @@ check_PII <- function(df) {
   if (length(lat_cols) > 0 && length(long_cols) > 0) {
     lat_long_combinations <- expand.grid(lat_cols, long_cols)
     for (i in 1:nrow(lat_long_combinations)) {
-      flagged_columns[[paste(lat_long_combinations[i, 1], lat_long_combinations[i, 2], sep = " & ")]] <- "Potential latitude/longitude pair detected"
+      flagged_columns <- rbind(flagged_columns, data.frame(Column = paste(lat_long_combinations[i, 1], lat_long_combinations[i, 2], sep = " & "), Reason = "Potential latitude/longitude or similar pair detected"))
     }
   }
 
-  # Return the list of flagged columns
+  # Return the data frame of flagged columns and reasons
   return(flagged_columns)
 }
-
