@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # pii: A package for dealing with personally identifiable information
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/pii)](https://CRAN.R-project.org/package=pii)
 <!-- badges: end -->
 
 The goal of pii is to flag columns that potentially contain personally identifiable information. This package was inspired by concerns that survey data might be shared without users realizing the files contain PII. It is based on a set of [standard guidlines](https://www.usaid.gov/sites/default/files/2022-05/508saa.pdf) from the United States Agency for International Development, though people can debate what is and isn't PII. 
