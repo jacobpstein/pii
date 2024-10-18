@@ -4,9 +4,6 @@
 # pii: A package for dealing with personally identifiable information
 
 <!-- badges: start -->
-
-[![CRAN
-status](https://www.r-pkg.org/badges/version/pii)](https://CRAN.R-project.org/package=pii)
 <!-- badges: end -->
 
 The goal of pii is to flag columns that potentially contain personally
@@ -155,12 +152,12 @@ head(car_df_to_share)
 #> 5 Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
 #> 6           Valiant 18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
 #>                               join_key
-#> 1 8658fc50-cadd-46fd-958c-8ad1229cf906
-#> 2 fe6bfcff-78bb-430b-b5a1-09406a01d50a
-#> 3 d3d1e64c-ab0c-4bc8-807f-6b263e5a6bef
-#> 4 0589b163-f3c6-4e8f-a989-514d183cba64
-#> 5 ed7434aa-a3e5-4cd2-a25c-86ddc998ecca
-#> 6 c938b219-5886-4aa6-a8b8-e7ae83fb604d
+#> 1 ee2ba3ca-7f8d-4330-8f05-47ce32953423
+#> 2 e5e86778-057c-4be7-bf84-15a6af23b699
+#> 3 dbce1056-f004-4a20-921e-7ca2158e3946
+#> 4 cd77b848-7f59-4463-a958-8f8b708adfa8
+#> 5 ede1b75a-5538-46d0-b572-b874b9ec7bd3
+#> 6 35630298-e4d4-4894-aab9-2517c3996d38
 ```
 
 Seems ok. Meanwhile, you can put the PII in a secure, encrypted
@@ -171,10 +168,10 @@ location. But let’s take a peak…
 # take a look at our PII data
 head(car_PII)
 #>   phone_number  longitude  latitude                             join_key
-#> 1 555-292-5528 -165.64468 -71.17268 8658fc50-cadd-46fd-958c-8ad1229cf906
-#> 2 555-699-1808  -63.92327  23.78131 fe6bfcff-78bb-430b-b5a1-09406a01d50a
-#> 3 555-732-3162 -103.97027  35.18776 d3d1e64c-ab0c-4bc8-807f-6b263e5a6bef
-#> 4 555-513-8575 -119.58928 -77.85741 0589b163-f3c6-4e8f-a989-514d183cba64
-#> 5 555-597-6296  177.27554 -75.31981 ed7434aa-a3e5-4cd2-a25c-86ddc998ecca
-#> 6 555-973-6320 -178.92443  36.31883 c938b219-5886-4aa6-a8b8-e7ae83fb604d
+#> 1 555-292-5528 -165.64468 -71.17268 ee2ba3ca-7f8d-4330-8f05-47ce32953423
+#> 2 555-699-1808  -63.92327  23.78131 e5e86778-057c-4be7-bf84-15a6af23b699
+#> 3 555-732-3162 -103.97027  35.18776 dbce1056-f004-4a20-921e-7ca2158e3946
+#> 4 555-513-8575 -119.58928 -77.85741 cd77b848-7f59-4463-a958-8f8b708adfa8
+#> 5 555-597-6296  177.27554 -75.31981 ede1b75a-5538-46d0-b572-b874b9ec7bd3
+#> 6 555-973-6320 -178.92443  36.31883 35630298-e4d4-4894-aab9-2517c3996d38
 ```
