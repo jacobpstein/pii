@@ -48,6 +48,11 @@ You can install the development version of pii from
 devtools::install_github("jacobpstein/pii")
 ```
 
+You can also download from CRAN with:
+```{r}
+install.packages("pii")
+```
+
 ## Example
 
 Let’s say you’re working with the `mtcars` data set. But this isn’t just
