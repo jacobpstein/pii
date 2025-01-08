@@ -1,6 +1,6 @@
 Package: pii
 Title: Search Data Frames for Personally Identifiable Information
-Version: 1.0.0
+Version: 1.1.0
 Authors@R: 
     person("Jacob", "Patterson-Stein", email = "jacobpstein@gmail.com",
   role = c("aut", "cre"))
