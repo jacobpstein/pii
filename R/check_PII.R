@@ -6,6 +6,7 @@
 #' @import dplyr
 #' @import stringr
 #' @importFrom stats median
+#' @importFrom stats na.omit
 #' @export
 #'
 #' @examples
